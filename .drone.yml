@@ -1,0 +1,22 @@
+kind: pipeline
+type: docker
+name: Drone CI
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Compile kernel
+  image: ubuntu
+  environment:
+    GITHUB_TOKEN:
+      from_secret: github_token
+  commands:
+  - apt-get update -y > /dev/null 2>&1
+  - apt-get install -y git > /dev/null 2>&1
+  - cd $HOME
+  - git clone --depth=1 https://github.com/kdrag0n/proton-clang clang > /dev/null 2>&1
+  - git clone --depth=1 https://CristianRo10:$GITHUB_TOKEN@github.com/CristianRo10/poco_kernel -b eleven kernel > /dev/null 2>&1
+  - cd kernel
+  - bash kernel.sh
